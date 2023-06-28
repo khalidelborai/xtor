@@ -24,12 +24,14 @@ jobs:
 
       - name: Test Tor with obfs4proxy
         run: |
+          echo "Waiting for Tor to start..."
+          sleep 10
           for i in {1..3}; do
-            echo "Waiting for Tor to start..."
-            sleep 10
             original_ip=$(curl -s https://api.ipify.org)
             echo "Original IP: $original_ip"
-            tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org)
+            tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org) || 0
+            if [ "$tor_ip" = "0" ]; then
+              echo "Retry #$i: Unable to get Tor IP address"
             if [ "$original_ip" != "$tor_ip" ]; then
               echo "Success: Tor IP is different from original IP"
               exit 0
