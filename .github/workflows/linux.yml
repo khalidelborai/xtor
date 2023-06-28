@@ -20,9 +20,15 @@ jobs:
       - name: Configure Tor
         run: |
           sudo sed -i 's/#SocksPort 9050/SocksPort 9060/g' /etc/tor/torrc
+          sudo sed -i 's/#ControlPort 9051/ControlPort 9061/g' /etc/tor/torrc
+          # password is "pass123"
+          sudo sed -i 's/#HashedControlPassword/HashedControlPassword/g' /etc/tor/torrc
+          # generate password hash
+          pass_hash=$(tor --hash-password pass123 | tail -n 1)
+          sudo sed -i "s|HashedControlPassword|$pass_hash|g" /etc/tor/torrc
           sudo service tor restart
 
-      - name: Test Tor with obfs4proxy
+      - name: Test Tor
         run: |
           echo "Waiting for Tor to start..."
           sleep 10
@@ -39,3 +45,24 @@ jobs:
           done
           echo "Error: Unable to get a different IP address from Tor after multiple attempts"
           exit 1
+      
+      - name: New Ip
+        run: |
+          # authenticate and send signal to change IP
+          echo "AUTHENTICATE \"pass123\"" | nc 127.0.0.1 9061
+          echo "SIGNAL NEWNYM" | nc 127.0.0.1 9061
+          echo "Waiting for Tor to change IP..."
+          sleep 10
+          for i in {1..3}; do
+            new_tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org)
+            if [ "$tor_ip" != "$new_tor_ip" ]; then
+              echo "Success: Tor IP has changed"
+              exit 0
+            else
+              echo "Retry #$i: Tor IP is the same as before"
+            fi
+          done
+          echo "Error: Unable to get a different IP address from Tor after multiple attempts"
+          exit 1
+          
+          
