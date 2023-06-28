@@ -5,7 +5,7 @@ on:
     branches: [master]
 
 jobs:
-  test:
+  test_windows:
     runs-on: windows-latest
 
     steps:
@@ -13,9 +13,8 @@ jobs:
 
       - name: Download Tor Expert Bundle
         run: |
-         Install-Package 7Zip4Powershell -ProviderName PowerShellGet
          $url = 'https://archive.torproject.org/tor-package-archive/torbrowser/12.5a6/tor-expert-bundle-12.5a6-windows-x86_64.tar.gz'
          $output = 'tor-expert-bundle.tar.gz'
          Invoke-WebRequest -Uri $url -OutFile $output
-         Expand-7Zip $output -DestinationPath .
+         tar -xvzf $output -C . 
          Get-ChildItem -Path .
