@@ -1,0 +1,40 @@
+name: Test Tor on Linux with obfs4proxy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install Tor and obfs4proxy
+        run: |
+          sudo apt-get update
+          sudo apt-get install tor obfs4proxy -y
+
+      - name: Configure Tor
+        run: |
+          sudo sed -i 's/#SocksPort 9050/SocksPort 9060/g' /etc/tor/torrc
+
+      - name: Test Tor with obfs4proxy
+        run: |
+          sudo systemctl start tor.service
+          for i in {1..3}; do
+            echo "Waiting for Tor to start..."
+            sleep 10
+            original_ip=$(curl -s https://api.ipify.org)
+            tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org)
+            if [ "$original_ip" != "$tor_ip" ]; then
+              echo "Success: Tor IP is different from original IP"
+              exit 0
+            else
+              echo "Retry #$i: Tor IP is the same as original IP"
+            fi
+          done
+          echo "Error: Unable to get a different IP address from Tor after multiple attempts"
+          exit 1
