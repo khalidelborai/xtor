@@ -35,8 +35,11 @@ jobs:
           for i in {1..5}; do
             original_ip=$(curl -s https://api.ipify.org)
             echo "Original IP: $original_ip"
-            tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org || exit 1)
-            if [ "$original_ip" != "$tor_ip" ]; then
+            tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org)
+            if [ $? -ne 0 ]; then
+              echo "Error: Unable to connect to Tor"
+              exit 1
+            elif [ "$original_ip" != "$tor_ip" ]; then
               echo "Success: Tor IP is different from original IP"
               exit 0
             else
@@ -54,8 +57,11 @@ jobs:
           echo "Waiting for Tor to change IP..."
           sleep 10
           for i in {1..3}; do
-            new_tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org || exit 1)
-            if [ "$tor_ip" != "$new_tor_ip" ]; then
+            new_tor_ip=$(curl --socks5-hostname 127.0.0.1:9060 https://api.ipify.org)
+            if [ $? -ne 0 ]; then
+              echo "Error: Unable to connect to Tor"
+              exit 1
+            elif [ "$tor_ip" != "$new_tor_ip" ]; then
               echo "Success: Tor IP has changed"
               exit 0
             else
@@ -64,5 +70,3 @@ jobs:
           done
           echo "Error: Unable to get a different IP address from Tor after multiple attempts"
           exit 1
-
-          
