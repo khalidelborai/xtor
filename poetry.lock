@@ -118,6 +118,17 @@ files = [
 ]
 
 [[package]]
+name = "itermate"
+version = "1.0.2"
+description = "Iterator-tools for functional programming."
+optional = false
+python-versions = "*"
+files = [
+    {file = "itermate-1.0.2-py2-none-any.whl", hash = "sha256:00308991e0fe54465e0e0fbec4d47180b4f6df0f26c1e5d2ce3641e3373f28a0"},
+    {file = "itermate-1.0.2.zip", hash = "sha256:5ee758cbb363493156cee7a29effc2b148a1a19d2be3097e92fc824991901e2a"},
+]
+
+[[package]]
 name = "sniffio"
 version = "1.3.0"
 description = "Sniff out which async library your code is running under"
@@ -160,7 +171,21 @@ files = [
     {file = "typing_extensions-4.6.3.tar.gz", hash = "sha256:d91d5919357fe7f681a9f2b5b4cb2a5f1ef0a1e9f59c4d8ff0d3491e05c0ffd5"},
 ]
 
+[[package]]
+name = "where"
+version = "1.0.2"
+description = "Locates absolute file paths like the Windows 'where' or the Linux 'which' utility.\nMakes use of the PATH variable and the current directory."
+optional = false
+python-versions = "*"
+files = [
+    {file = "where-1.0.2-py2.py3-none-any.whl", hash = "sha256:66abc8edf95be7516e949d08a771f25acacff708ef481618562ab484fe5bc63e"},
+    {file = "where-1.0.2.zip", hash = "sha256:325ef3a492a26189a47819f7375bc146887d39edd36fce132e86514334803fb1"},
+]
+
+[package.dependencies]
+itermate = "1.0.2"
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.7"
-content-hash = "90d618f822758f563d71424e97336c752a3d83f788af6e1df7428b0c681ef06c"
+content-hash = "0976b5b1862bff849bb517474a0cefc0ff830955a1d5f4578c410f4ae1518447"

@@ -3,9 +3,10 @@ __version__ = "0.2.0"
 from subprocess import Popen
 from typing import Optional
 
-from httpx import Client, Timeout
+from httpx import Client
 from stem.control import Controller
 from stem.process import launch_tor_with_config
+from where import first as where
 
 from xtor.utils import checkPort, getTorPassHash
 
@@ -36,6 +37,7 @@ class Tor:
         password: Optional[str] = None,
         client_options: Optional[dict] = {},
         config: Optional[dict] = {},
+        path: Optional[str] = None,
         *args,
         **kwargs,
     ) -> "Tor":
@@ -56,6 +58,16 @@ class Tor:
         Returns:
             Tor: Tor instance
         """
+
+        if path is not None:
+            kwargs["tor_cmd"] = path
+        
+        if path is None:
+            if where("tor") is None:
+                raise Exception("Tor is not installed")
+            kwargs["tor_cmd"] = where("tor")
+
+
         if not checkPort(port, host):
             raise Exception(f"Port {port} is already in use")
         if not checkPort(control_port, host):
@@ -69,6 +81,8 @@ class Tor:
 
         if password is not None:
             config["HashedControlPassword"] = getTorPassHash(password)
+
+        
 
         tor: Popen = launch_tor_with_config(
             config=config,

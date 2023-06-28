@@ -20,6 +20,7 @@ keywords = [
 python = "^3.7"
 stem = "^1.8.2"
 httpx = { extras = ["socks"], version = "^0.24.1" }
+where = "^1.0.2"
 
 
 [build-system]
