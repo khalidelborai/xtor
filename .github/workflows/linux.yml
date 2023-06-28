@@ -2,7 +2,7 @@ name: Test Tor on Linux with obfs4proxy
 
 on:
   push:
-    branches: [main]
+    branches: [master]
 
 jobs:
   test:
