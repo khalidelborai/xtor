@@ -43,10 +43,10 @@ def getTorPassHash(sectretPassword="passw0rd"):
     return hashedControlPassword
 
 
-def checkPort(port: int) -> bool:
+def checkPort(port: int, host:str) -> bool:
     """
     Check if port is in use
     """
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    result = sock.connect_ex(("localhost", port))
+    result = sock.connect_ex((host, port))
     return result != 0

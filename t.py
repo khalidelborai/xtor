@@ -1,5 +1,12 @@
-from xtor import Tor, getTorPassHash
+from xtor import Tor
 
-with Tor(password="password", port=9050) as tor:
-    # print(tor.ip)
-    print(tor.client.get("http://api.ipify.org").text)
+tor = Tor.startTor(
+    port=9052,
+    control_port=9053,
+    host="127.0.0.1",
+    password="passw0rd",
+    init_msg_handler=print,
+)
+
+with tor:
+    print(tor.ip)
