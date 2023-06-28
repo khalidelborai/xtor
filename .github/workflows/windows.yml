@@ -1,0 +1,21 @@
+name: Test Tor on Windows with obfs4proxy
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  test:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Download Tor Expert Bundle
+        run: |
+         Install-Package 7Zip4Powershell
+         $url = 'https://archive.torproject.org/tor-package-archive/torbrowser/12.5a6/tor-expert-bundle-12.5a6-windows-x86_64.tar.gz'
+         $output = 'tor-expert-bundle.tar.gz'
+         Invoke-WebRequest -Uri $url -OutFile $output
+         Expand-7Zip $output -DestinationPath .
+         Get-ChildItem -Path .
