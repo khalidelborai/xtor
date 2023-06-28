@@ -1,4 +1,4 @@
-__version__ = "0.1.3"
+__version__ = "0.2.0"
 
 from subprocess import Popen
 from typing import Optional
@@ -92,6 +92,10 @@ class Tor:
     def client(self) -> Client:
         """
         Get httpx Client
+
+        Returns:
+            Client: httpx Client
+
         """
         if not hasattr(self, "_client"):
             self._client = Client(
@@ -140,3 +144,4 @@ class Tor:
         if not hasattr(self, "_ip"):
             self._ip = self.__getIP()
         return self._ip
+

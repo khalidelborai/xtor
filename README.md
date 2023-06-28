@@ -18,14 +18,34 @@ Then install the python package:
 
 `pip install xtor`
 
-- `ServerTransportPlugin obfs3,obfs4 exec /usr/bin/obfs4proxy`
-- `sudo apt-get install tor`
-- `SocksPort 0`
-- `ControlPort 9051`
-- `ExitNodes {us}`
-- `StrictNodes 1`
-- `DataDirectory /var/lib/tor`
-- `BridgeRelay 1`
-- `Bridge obfs4`
-- `Bridges <IP>:<PORT> <IP>:<PORT> <IP>:<PORT> <IP>:<PORT>`
-  
+## Usage
+
+```python
+from xtor import Tor
+
+tor = Tor.startTor(
+    port=9052,
+    control_port=9053,
+    host="127.0.0.1",
+    password="passw0rd",
+    init_msg_handler=print,
+)
+
+with tor:
+  print(tor.ip)
+  print(tor.client.get("https://api.ipify.org").text)
+
+
+# connect to an existing tor instance
+
+tor = Tor(
+    port=9052,
+    control_port=9053,
+    host="127.0.0.1",
+    password="passw0rd",
+)
+
+with tor:
+  print(tor.ip)
+  print(tor.client.get("https://api.ipify.org").text)
+```
