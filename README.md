@@ -29,6 +29,7 @@ tor = Tor.startTor(
     host="127.0.0.1",
     password="passw0rd",
     init_msg_handler=print,
+    path="/usr/bin/tor", # optional, primarily for windows
 )
 
 with tor:
