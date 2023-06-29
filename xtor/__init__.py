@@ -20,7 +20,19 @@ class Tor:
         host: Optional[str] = "127.0.0.1",
         client_options: Optional[dict] = {},
         tor: Optional[Popen] = None,
+
     ) -> None:
+        """
+        Tor instance
+
+        Args:
+            password (str): Password to use for Tor
+            port (int, optional): Port to use for Tor. Defaults to 9050.
+            control_port (int, optional): Control port to use for Tor. Defaults to 9051.
+            host (Optional[str], optional): Host to use for Tor. Defaults to "
+            client_options (Optional[dict], optional): Client options to use for Tor. Defaults to {}.
+            tor (Optional[Popen], optional): Tor process. Defaults to None.
+        """
         self.port = port
         self.password = password
         self.control_port = control_port
@@ -38,6 +50,7 @@ class Tor:
         client_options: Optional[dict] = {},
         config: Optional[dict] = {},
         path: Optional[str] = None,
+        own: Optional[bool] = True,
         *args,
         **kwargs,
     ) -> "Tor":
@@ -50,6 +63,8 @@ class Tor:
             host (str): Host to use for Tor
             password (Optional[str], optional): Password to use for Tor. Defaults to None.
             client_options (Optional[dict], optional): Client options to use for Tor. Defaults to {}.
+            config (Optional[dict], optional): Tor instance additional config
+            own (Optional[bool], optional): asserts ownership over the tor process so it aborts if this python process terminates or a `Controller` we establish to it disconnects
 
         Raises:
             Exception: If port is already in use
@@ -86,7 +101,7 @@ class Tor:
 
         tor: Popen = launch_tor_with_config(
             config=config,
-            take_ownership=True,
+            take_ownership=own,
             *args,
             **kwargs,
         )
@@ -153,9 +168,24 @@ class Tor:
     @property
     def ip(self) -> str:
         """
-        Get IP
+        Get connected instance IP
+
+        Returns:
+            str: instance IP
+
         """
         if not hasattr(self, "_ip"):
             self._ip = self.__getIP()
         return self._ip
 
+    def kill(self) -> None:
+        """
+        Kill Tor process
+        """
+        self.tor.kill()
+
+    def terminate(self) -> None:
+        """
+        Terminate Tor process
+        """
+        self.tor.terminate()
