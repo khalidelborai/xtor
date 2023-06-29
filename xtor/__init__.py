@@ -20,7 +20,6 @@ class Tor:
         host: Optional[str] = "127.0.0.1",
         client_options: Optional[dict] = {},
         tor: Optional[Popen] = None,
-
     ) -> None:
         """
         Tor instance

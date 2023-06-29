@@ -73,7 +73,7 @@ Get connected instance IP
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L137"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L136"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>function</kbd> `connect`
 
@@ -85,7 +85,7 @@ Connect to Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L143"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L142"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>function</kbd> `disconnect`
 
@@ -97,7 +97,7 @@ Disconnect from Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L181"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L180"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>function</kbd> `kill`
 
@@ -109,7 +109,7 @@ Kill Tor process
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L44"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>function</kbd> `startTor`
 
@@ -157,7 +157,7 @@ Start Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L187"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L186"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>function</kbd> `terminate`
 
