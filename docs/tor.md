@@ -1,6 +1,6 @@
 <!-- markdownlint-disable -->
 
-<a href="../xtor/tor.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 # <kbd>module</kbd> `tor`
 
@@ -11,14 +11,14 @@
 
 ---
 
-<a href="../xtor/tor.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ## <kbd>class</kbd> `Tor`
 
 
 
 
-<a href="../xtor/tor.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `__init__`
 
@@ -75,7 +75,7 @@ Get connected instance IP
 
 ---
 
-<a href="../xtor/tor.py#L134"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L134"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `connect`
 
@@ -87,7 +87,7 @@ Connect to Tor
 
 ---
 
-<a href="../xtor/tor.py#L140"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L140"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `disconnect`
 
@@ -99,7 +99,7 @@ Disconnect from Tor
 
 ---
 
-<a href="../xtor/tor.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `kill`
 
@@ -111,7 +111,7 @@ Kill Tor process
 
 ---
 
-<a href="../xtor/tor.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `startTor`
 
@@ -159,7 +159,7 @@ Start Tor
 
 ---
 
-<a href="../xtor/tor.py#L184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `terminate`
 
