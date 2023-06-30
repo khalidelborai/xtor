@@ -1,8 +1,8 @@
 <!-- markdownlint-disable -->
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L0"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-# <kbd>module</kbd> `__init__.py`
+# <kbd>module</kbd> `tor`
 
 
 
@@ -11,14 +11,16 @@
 
 ---
 
+<a href="../xtor/tor.py#L12"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
 ## <kbd>class</kbd> `Tor`
 
 
 
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L15"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L13"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `__init__`
+### <kbd>method</kbd> `__init__`
 
 ```python
 __init__(
@@ -73,9 +75,9 @@ Get connected instance IP
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L136"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L134"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `connect`
+### <kbd>method</kbd> `connect`
 
 ```python
 connect() → None
@@ -85,9 +87,9 @@ Connect to Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L142"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L140"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `disconnect`
+### <kbd>method</kbd> `disconnect`
 
 ```python
 disconnect() → None
@@ -97,9 +99,9 @@ Disconnect from Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L180"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `kill`
+### <kbd>method</kbd> `kill`
 
 ```python
 kill() → None
@@ -109,9 +111,9 @@ Kill Tor process
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L43"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L41"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `startTor`
+### <kbd>method</kbd> `startTor`
 
 ```python
 startTor(
@@ -157,9 +159,9 @@ Start Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/__init__.py#L186"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="../xtor/tor.py#L184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
-### <kbd>function</kbd> `terminate`
+### <kbd>method</kbd> `terminate`
 
 ```python
 terminate() → None
