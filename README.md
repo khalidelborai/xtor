@@ -1,7 +1,7 @@
 xtor
 ===============================
 
-Torx is a simple tool for managing Tor instances.
+xtor is a simple tool for managing Tor instances.
 
 ## Installation
 
