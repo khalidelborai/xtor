@@ -50,3 +50,9 @@ with tor:
   print(tor.ip)
   print(tor.client.get("https://api.ipify.org").text)
 ```
+
+## CLI
+
+```bash
+xtor --help
+```
