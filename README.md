@@ -49,6 +49,8 @@ tor = Tor(
 with tor:
   print(tor.ip)
   print(tor.client.get("https://api.ipify.org").text)
+  tor.new_identity(wait=True) # get a new identity and wait for it to be ready (new ip)
+  print(tor.ip)
 ```
 
 ## CLI

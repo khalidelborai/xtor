@@ -99,7 +99,7 @@ Disconnect from Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L190"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `kill`
 
@@ -108,6 +108,18 @@ kill() → None
 ```
 
 Kill Tor process 
+
+---
+
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L178"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+
+### <kbd>method</kbd> `new_identity`
+
+```python
+new_identity(wait=False) → None
+```
+
+Get new identity 
 
 ---
 
@@ -159,7 +171,7 @@ Start Tor
 
 ---
 
-<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L184"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
+<a href="https://github.com/khalidelborai/xtor/blob/master/xtor/tor.py#L196"><img align="right" style="float:right;" src="https://img.shields.io/badge/-source-cccccc?style=flat-square"></a>
 
 ### <kbd>method</kbd> `terminate`
 

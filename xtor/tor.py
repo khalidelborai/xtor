@@ -174,6 +174,18 @@ class Tor:
         if not hasattr(self, "_ip"):
             self._ip = self.__getIP()
         return self._ip
+    
+    def new_identity(self, wait = False) -> None:
+        """
+        Get new identity
+        """
+        self.controller.signal("NEWNYM")
+        ip = self.__getIP()
+        if wait:
+            while ip == self.ip:
+                ip = self.__getIP()
+        self._ip = ip
+        
 
     def kill(self) -> None:
         """
