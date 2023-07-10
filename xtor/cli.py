@@ -16,7 +16,7 @@ def start(
     max_time: int = typer.Option(0, help="Max time to run tor"),
 ):
     """Start a tor server"""
-    tor = Tor.startTor(port=port, host=host, control_port=control_port, password=password, own=own, path=path, countries=countries,max_circuit_dirtiness=max_time)
+    tor = Tor.startTor(port=port, host=host, control_port=control_port, password=password, own=own, path=path, countries=countries.split(','),max_circuit_dirtiness=max_time)
     typer.echo(f"Tor started on {tor.host}:{tor.port}")
 
     if own:
