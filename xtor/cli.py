@@ -12,7 +12,7 @@ def start(
     password: str = typer.Option("password", help="Password to control tor"),
     own: bool = typer.Option(True, help="Own tor process"),
     path: str = typer.Option("tor", help="Path to tor binary"),
-    countries: list = typer.Option([], help="Countries to use for tor"),
+    countries: str = typer.Option('EG,DE', help="Countries to use for tor, comma separated"),
     max_time: int = typer.Option(0, help="Max time to run tor"),
 ):
     """Start a tor server"""
