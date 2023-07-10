@@ -12,9 +12,11 @@ def start(
     password: str = typer.Option("password", help="Password to control tor"),
     own: bool = typer.Option(True, help="Own tor process"),
     path: str = typer.Option("tor", help="Path to tor binary"),
+    countries: list = typer.Option([], help="Countries to use for tor"),
+    max_time: int = typer.Option(0, help="Max time to run tor"),
 ):
     """Start a tor server"""
-    tor = Tor.startTor(port=port, host=host, control_port=control_port, password=password, own=own, path=path)
+    tor = Tor.startTor(port=port, host=host, control_port=control_port, password=password, own=own, path=path, countries=countries,max_circuit_dirtiness=max_time)
     typer.echo(f"Tor started on {tor.host}:{tor.port}")
 
     if own:

@@ -48,6 +48,8 @@ class Tor:
         config: Optional[dict] = {},
         path: Optional[str] = None,
         own: Optional[bool] = True,
+        max_circuit_dirtiness: Optional[int] = None,
+        countries: Optional[list] = None,
         *args,
         **kwargs,
     ) -> "Tor":
@@ -94,7 +96,15 @@ class Tor:
         if password is not None:
             config["HashedControlPassword"] = getTorPassHash(password)
 
+        if max_circuit_dirtiness is not None and max_circuit_dirtiness >= 10:
+            config["MaxCircuitDirtiness"] = str(max_circuit_dirtiness)
+
+        if countries is not None:
+            config["ExitNodes"] = "{" + ",".join(countries) + "}"
+            
         
+
+
 
         tor: Popen = launch_tor_with_config(
             config=config,
