@@ -8,6 +8,7 @@ from stem.process import launch_tor_with_config
 from where import first as where
 
 from xtor.utils import checkPort, getTorPassHash
+from xtor.config_manager import ConfigManager # Added import
 
 
 class Tor:
@@ -38,6 +39,66 @@ class Tor:
         self.client_options = client_options
         self.tor = tor
         self.host = host
+
+    @staticmethod
+    def from_config_id(cls, instance_id: str, config_manager: ConfigManager) -> "Tor":
+        """
+        Creates and starts a Tor instance from a saved configuration ID.
+
+        Args:
+            instance_id (str): The unique identifier for the Tor instance configuration.
+            config_manager (ConfigManager): The configuration manager instance to use
+                                            for loading the configuration.
+
+        Returns:
+            Tor: The started Tor instance.
+
+        Raises:
+            ValueError: If the instance configuration with the given ID is not found.
+        """
+        config_data = config_manager.load_config(instance_id)
+        if config_data is None:
+            raise ValueError(f"Instance configuration with ID '{instance_id}' not found.")
+
+        # Extract parameters, providing defaults that align with startTor or common usage
+        # Required parameters for startTor that must be in config or have sensible global defaults
+        port = config_data.get("port")
+        control_port = config_data.get("control_port")
+        host = config_data.get("host", "127.0.0.1") # Default from Tor.__init__
+
+        if port is None:
+            raise ValueError(f"Missing 'port' in configuration for instance ID '{instance_id}'.")
+        if control_port is None:
+            raise ValueError(f"Missing 'control_port' in configuration for instance ID '{instance_id}'.")
+
+        # Optional parameters for startTor
+        password = config_data.get("password") # Defaults to None if not present
+        client_options = config_data.get("client_options", {})
+        # 'config' here refers to torrc_config for launch_tor_with_config
+        torrc_config = config_data.get("torrc_config", {}) # formerly 'config' in startTor signature
+        path = config_data.get("path")
+        own = config_data.get("own", True) # Default from startTor
+        max_circuit_dirtiness = config_data.get("max_circuit_dirtiness")
+        countries = config_data.get("countries")
+        
+        # Ensure 'SocksPort' and 'ControlPort' in torrc_config are consistent or not set directly by user
+        # as startTor will set them based on its direct parameters.
+        # If they are in torrc_config, they might be overridden by startTor's logic.
+        # For simplicity, we assume they are either not in torrc_config from ConfigManager,
+        # or if they are, startTor's explicit params take precedence.
+
+        return cls.startTor(
+            port=int(port), # Ensure type
+            control_port=int(control_port), # Ensure type
+            host=str(host),
+            password=password, # Can be None
+            client_options=client_options,
+            config=torrc_config, # This is the 'config' arg for startTor, used for torrc settings
+            path=path, # Can be None
+            own=own,
+            max_circuit_dirtiness=max_circuit_dirtiness, # Can be None
+            countries=countries # Can be None
+        )
 
     @staticmethod
     def startTor(
