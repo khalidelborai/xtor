@@ -1,3 +1,4 @@
+import time
 from subprocess import Popen
 from typing import Optional
 
@@ -208,3 +209,52 @@ class Tor:
         Terminate Tor process
         """
         self.tor.terminate()
+
+    def stop(self) -> None:
+        """
+        Stop the Tor process if it was started by this instance.
+        """
+        if self.tor is None:
+            print("Tor process was not started by this instance or is already stopped.")
+            return
+
+        try:
+            print("Attempting to terminate Tor process...")
+            self.tor.terminate()
+            try:
+                # Wait for a few seconds for the process to terminate
+                self.tor.wait(timeout=5) # Python 3.3+
+                print("Tor process terminated gracefully.")
+            except AttributeError: # self.tor.wait() is not available in python 3.2
+                 time.sleep(5) # wait 5 seconds
+                 if self.tor.poll() is None: # check if process is still running
+                    print("Tor process did not terminate gracefully, attempting to kill...")
+                    self.tor.kill()
+                    print("Tor process killed.")
+                 else:
+                    print("Tor process terminated gracefully.")
+            except TimeoutError: # subprocess.TimeoutExpired in Python 3.3+
+                print("Tor process did not terminate gracefully within timeout, attempting to kill...")
+                self.tor.kill()
+                # Wait a bit for kill to take effect
+                time.sleep(2)
+                if self.tor.poll() is None:
+                    print("Failed to kill Tor process.")
+                else:
+                    print("Tor process killed.")
+            except Exception as e: # Catch other potential exceptions during wait/poll
+                print(f"An error occurred while waiting for Tor process to terminate: {e}")
+                print("Attempting to kill Tor process...")
+                self.tor.kill()
+                time.sleep(2) # Wait a bit for kill to take effect
+                if self.tor.poll() is None:
+                    print("Failed to kill Tor process after error.")
+                else:
+                    print("Tor process killed after error.")
+
+        except ProcessLookupError: # This can happen if the process is already dead
+            print("Tor process was already stopped.")
+        except Exception as e:
+            print(f"An error occurred while trying to stop the Tor process: {e}")
+        finally:
+            self.tor = None
