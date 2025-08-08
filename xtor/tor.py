@@ -1,3 +1,5 @@
+import secrets
+import string
 from subprocess import Popen
 from typing import Optional
 
@@ -6,7 +8,18 @@ from stem.control import Controller
 from stem.process import launch_tor_with_config
 from where import first as where
 
+from xtor.state import (
+    create_instance_dir,
+    read_state,
+    remove_instance_dir,
+    write_state,
+)
 from xtor.utils import checkPort, getTorPassHash
+
+
+def generate_password(length=16):
+    alphabet = string.ascii_letters + string.digits
+    return "".join(secrets.choice(alphabet) for i in range(length))
 
 
 class Tor:
@@ -18,6 +31,7 @@ class Tor:
         host: Optional[str] = "127.0.0.1",
         client_options: Optional[dict] = {},
         tor: Optional[Popen] = None,
+        name: Optional[str] = None,
     ) -> None:
         """
         Tor instance
@@ -29,6 +43,7 @@ class Tor:
             host (Optional[str], optional): Host to use for Tor. Defaults to "
             client_options (Optional[dict], optional): Client options to use for Tor. Defaults to {}.
             tor (Optional[Popen], optional): Tor process. Defaults to None.
+            name (Optional[str], optional): Name of the instance. Defaults to None.
         """
         self.port = port
         self.password = password
@@ -37,6 +52,86 @@ class Tor:
         self.client_options = client_options
         self.tor = tor
         self.host = host
+        self.name = name
+
+    @classmethod
+    def create(
+        cls,
+        port: int,
+        control_port: int,
+        host: str,
+        password: Optional[str] = None,
+        client_options: Optional[dict] = {},
+        config: Optional[dict] = {},
+        path: Optional[str] = None,
+        own: Optional[bool] = True,
+        max_circuit_dirtiness: Optional[int] = None,
+        countries: Optional[list] = None,
+        name: Optional[str] = None,
+        *args,
+        **kwargs,
+    ) -> "Tor":
+        if path is not None:
+            kwargs["tor_cmd"] = path
+        if path is None:
+            if where("tor") is None:
+                raise Exception("Tor is not installed")
+            kwargs["tor_cmd"] = where("tor")
+
+        if not checkPort(port, host):
+            raise Exception(f"Port {port} is already in use")
+        if not checkPort(control_port, host):
+            raise Exception(f"Port {control_port} is already in use")
+
+        if password is None:
+            password = generate_password()
+
+        tor_config = {
+            "SocksPort": str(port),
+            "ControlPort": str(control_port),
+            "HashedControlPassword": getTorPassHash(password),
+            **config,
+        }
+
+        if max_circuit_dirtiness is not None and max_circuit_dirtiness >= 10:
+            tor_config["MaxCircuitDirtiness"] = str(max_circuit_dirtiness)
+        if countries is not None:
+            tor_config["ExitNodes"] = "{" + ",".join(countries) + "}"
+
+        if name:
+            instance_dir = create_instance_dir(name)
+            tor_config["DataDirectory"] = str(instance_dir)
+
+        tor_process = launch_tor_with_config(
+            config=tor_config,
+            take_ownership=own,
+            *args,
+            **kwargs,
+        )
+
+        instance = cls(
+            password=password,
+            port=port,
+            control_port=control_port,
+            client_options=client_options,
+            tor=tor_process,
+            host=host,
+            name=name,
+        )
+
+        if name:
+            state = read_state()
+            state[name] = {
+                "pid": tor_process.pid,
+                "port": port,
+                "control_port": control_port,
+                "password": password,
+                "host": host,
+                "data_dir": str(instance_dir),
+            }
+            write_state(state)
+
+        return instance
 
     @staticmethod
     def startTor(
@@ -53,76 +148,53 @@ class Tor:
         *args,
         **kwargs,
     ) -> "Tor":
-        """
-        Start Tor
-
-        Args:
-            port (int): Port to use for Tor
-            control_port (int): Control port to use for Tor
-            host (str): Host to use for Tor
-            password (Optional[str], optional): Password to use for Tor. Defaults to None.
-            client_options (Optional[dict], optional): Client options to use for Tor. Defaults to {}.
-            config (Optional[dict], optional): Tor instance additional config
-            own (Optional[bool], optional): asserts ownership over the tor process so it aborts if this python process terminates or a `Controller` we establish to it disconnects
-
-        Raises:
-            Exception: If port is already in use
-            Exception: If control_port is already in use
-
-        Returns:
-            Tor: Tor instance
-        """
-
-        if path is not None:
-            kwargs["tor_cmd"] = path
-        
-        if path is None:
-            if where("tor") is None:
-                raise Exception("Tor is not installed")
-            kwargs["tor_cmd"] = where("tor")
-
-
-        if not checkPort(port, host):
-            raise Exception(f"Port {port} is already in use")
-        if not checkPort(control_port, host):
-            raise Exception(f"Port {control_port} is already in use")
-        
-        config = {
-            "SocksPort": str(port),
-            "ControlPort": str(control_port),
-            **config,
-        }
-
-        if password is not None:
-            config["HashedControlPassword"] = getTorPassHash(password)
-
-        if max_circuit_dirtiness is not None and max_circuit_dirtiness >= 10:
-            config["MaxCircuitDirtiness"] = str(max_circuit_dirtiness)
-
-        if countries is not None:
-            config["ExitNodes"] = "{" + ",".join(countries) + "}"
-            
-        
-
-
-
-        tor: Popen = launch_tor_with_config(
+        return Tor.create(
+            port=port,
+            control_port=control_port,
+            host=host,
+            password=password,
+            client_options=client_options,
             config=config,
-            take_ownership=own,
+            path=path,
+            own=own,
+            max_circuit_dirtiness=max_circuit_dirtiness,
+            countries=countries,
             *args,
             **kwargs,
         )
 
+    @classmethod
+    def from_name(cls, name: str) -> "Tor":
+        state = read_state()
+        if name not in state:
+            raise Exception(f"Instance '{name}' not found.")
 
-
-        return Tor(
-            password=password,
-            port=port,
-            control_port=control_port,
-            client_options=client_options,
-            tor=tor,
-            host=host,
+        instance_data = state[name]
+        return cls(
+            password=instance_data["password"],
+            port=instance_data["port"],
+            control_port=instance_data["control_port"],
+            host=instance_data["host"],
+            name=name,
         )
+
+    def stop(self):
+        if self.name:
+            state = read_state()
+            if self.name in state:
+                pid = state[self.name].get("pid")
+                if pid:
+                    try:
+                        import psutil
+                        process = psutil.Process(pid)
+                        process.terminate()
+                        process.wait(timeout=5)
+                    except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.TimeoutExpired):
+                        pass  # Process already gone or not accessible or timed out
+                del state[self.name]
+                write_state(state)
+        elif self.tor:
+            self.tor.terminate()
 
     @property
     def client(self) -> Client:

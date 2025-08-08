@@ -1,35 +1,34 @@
-name: Test Tor on Windows with obfs4proxy
+name: Test xtor
 
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
-  test_windows:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Download Tor Expert Bundle
-        run: |
-         $url = 'https://archive.torproject.org/tor-package-archive/torbrowser/12.5a6/tor-expert-bundle-12.5a6-windows-x86_64.tar.gz'
-         $output = 'tor-expert-bundle.tar.gz'
-         Invoke-WebRequest -Uri $url -OutFile $output
-         tar -xvzf $output -C . 
-         Get-ChildItem -Path .
-         
-  test_linux:
+  test:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v3
+        with:
+          python-version: "3.9"
 
-      - name: Install Tor and obfs4proxy
+      - name: Install Tor
         run: |
           sudo apt-get update
-          sudo apt-get install tor obfs4proxy -y
+          sudo apt-get install -y tor
 
-      - name: Start Tor
-        run: sudo systemctl start tor
+      - name: Install poetry
+        run: |
+          pip install poetry
+
+      - name: Install dependencies
+        run: |
+          poetry install --with dev
+
+      - name: Run tests
+        run: |
+          poetry run pytest
