@@ -7,7 +7,19 @@ on:
     branches: [master]
 
 jobs:
-  test:
+  test_windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Download Tor Expert Bundle
+        run: |
+         $url = 'https://archive.torproject.org/tor-package-archive/torbrowser/12.5a6/tor-expert-bundle-12.5a6-windows-x86_64.tar.gz'
+         $output = 'tor-expert-bundle.tar.gz'
+         Invoke-WebRequest -Uri $url -OutFile $output
+         tar -xvzf $output -C .
+         Get-ChildItem -Path .
+
+  test_linux:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -16,10 +28,10 @@ jobs:
         with:
           python-version: "3.9"
 
-      - name: Install Tor
+      - name: Install Tor and obfs4proxy
         run: |
           sudo apt-get update
-          sudo apt-get install -y tor
+          sudo apt-get install -y tor obfs4proxy
 
       - name: Install poetry
         run: |
