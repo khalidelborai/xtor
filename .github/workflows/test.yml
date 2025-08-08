@@ -22,7 +22,7 @@ jobs:
          tar -xvzf 'tor-expert-bundle.tar.gz' -C .
 
       - name: Add Tor to PATH
-        run: echo "$((Get-Location).Path)\tor-expert-bundle\tor" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        run: echo "$((Get-Location).Path)\tor-expert-bundle\Tor" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install poetry
         run: pip install poetry
