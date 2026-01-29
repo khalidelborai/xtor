@@ -3,6 +3,8 @@ xtor
 
 xtor is a simple tool for managing Tor instances.
 
+**Requirements:** Python 3.10+
+
 ## Installation
 
 - Linux
@@ -16,42 +18,56 @@ xtor is a simple tool for managing Tor instances.
 
 Then install the python package:
 
-`pip install xtor`
+```bash
+# Using pip
+pip install xtor
+
+# Using uv
+uv add xtor
+```
 
 ## Usage
 
 ```python
 from xtor import Tor
+from xtor.exceptions import TorNotFoundError, PortInUseError, IdentityChangeTimeout
 
-tor = Tor.startTor(
+# Start a new Tor process
+try:
+    with Tor.start(
+        port=9052,
+        control_port=9053,
+        host="127.0.0.1",
+        password="passw0rd",
+        init_msg_handler=print,
+        path="/usr/bin/tor",  # optional, primarily for windows
+    ) as tor:
+        print(tor.ip)
+        print(tor.client.get("https://api.ipify.org").text)
+except TorNotFoundError:
+    print("Tor binary not found on system PATH")
+except PortInUseError as e:
+    print(f"Port already in use: {e}")
+
+
+# Connect to an existing Tor instance
+with Tor(
     port=9052,
     control_port=9053,
     host="127.0.0.1",
     password="passw0rd",
-    init_msg_handler=print,
-    path="/usr/bin/tor", # optional, primarily for windows
-)
+) as tor:
+    print(tor.ip)
+    print(tor.client.get("https://api.ipify.org").text)
 
-with tor:
-  print(tor.ip)
-  print(tor.client.get("https://api.ipify.org").text)
-
-
-# connect to an existing tor instance
-
-tor = Tor(
-    port=9052,
-    control_port=9053,
-    host="127.0.0.1",
-    password="passw0rd",
-)
-
-with tor:
-  print(tor.ip)
-  print(tor.client.get("https://api.ipify.org").text)
-  tor.new_identity(wait=True) # get a new identity and wait for it to be ready (new ip)
-  print(tor.ip)
+    try:
+        tor.new_identity(wait=True)  # get a new identity and wait for it to be ready
+        print(tor.ip)
+    except IdentityChangeTimeout:
+        print("Timed out waiting for new IP address")
 ```
+
+Note: `Tor.startTor()` is still available as an alias for backwards compatibility.
 
 ## CLI
 
