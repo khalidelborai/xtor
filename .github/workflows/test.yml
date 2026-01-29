@@ -1,35 +1,63 @@
-name: Test Tor on Windows with obfs4proxy
-
+name: CI
 on:
   push:
     branches: [master]
+  pull_request:
+    branches: [master]
 
 jobs:
-  test_windows:
-    runs-on: windows-latest
-
-    steps:
-      - uses: actions/checkout@v2
-
-      - name: Download Tor Expert Bundle
-        run: |
-         $url = 'https://archive.torproject.org/tor-package-archive/torbrowser/12.5a6/tor-expert-bundle-12.5a6-windows-x86_64.tar.gz'
-         $output = 'tor-expert-bundle.tar.gz'
-         Invoke-WebRequest -Uri $url -OutFile $output
-         tar -xvzf $output -C . 
-         Get-ChildItem -Path .
-         
-  test_linux:
+  linux:
     runs-on: ubuntu-latest
-
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
-
-      - name: Install Tor and obfs4proxy
+      - uses: actions/checkout@v4
+      - name: Install system dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install tor obfs4proxy -y
+          sudo apt-get install -y tor obfs4proxy
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync --extra dev
+      - name: Type check
+        run: uv run mypy xtor/ --ignore-missing-imports
+      - name: Import smoke test
+        run: uv run python -c "from xtor import Tor, TorPool, InstanceState, HiddenService, ExitNodeInfo, get_tor_pass_hash, is_port_available; print('All imports OK')"
+      - name: CLI smoke test
+        run: uv run xtor --help
 
-      - name: Start Tor
-        run: sudo systemctl start tor
+  windows:
+    runs-on: windows-latest
+    strategy:
+      matrix:
+        python-version: ["3.10", "3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Download Tor Expert Bundle
+        shell: pwsh
+        run: |
+          $url = "https://archive.torproject.org/tor-package-archive/torbrowser/14.0.4/tor-expert-bundle-windows-x86_64-14.0.4.tar.gz"
+          Invoke-WebRequest -Uri $url -OutFile tor-bundle.tar.gz
+          mkdir tor-bundle
+          tar -xzf tor-bundle.tar.gz -C tor-bundle
+      - name: Add Tor to PATH
+        shell: pwsh
+        run: |
+          $torPath = (Get-ChildItem -Path tor-bundle -Recurse -Filter "tor.exe" | Select-Object -First 1).DirectoryName
+          echo "$torPath" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+      - name: Install uv
+        uses: astral-sh/setup-uv@v4
+      - name: Set up Python ${{ matrix.python-version }}
+        run: uv python install ${{ matrix.python-version }}
+      - name: Install dependencies
+        run: uv sync --extra dev
+      - name: Type check
+        run: uv run mypy xtor/ --ignore-missing-imports
+      - name: Import smoke test
+        run: uv run python -c "from xtor import Tor, TorPool, InstanceState, HiddenService, ExitNodeInfo, get_tor_pass_hash, is_port_available; print('All imports OK')"
+      - name: CLI smoke test
+        run: uv run xtor --help
